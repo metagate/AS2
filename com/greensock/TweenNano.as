@@ -6,18 +6,18 @@
  **/
 
 /**
- * TweenNano is a super-lightweight (2k in AS3 and 2.4k in AS2) version of <a href="http://www.greensock.com/tweenlite/">TweenLite</a> 
- * and is only recommended for situations where you absolutely cannot afford the extra 4.7k that the normal 
- * TweenLite engine would cost and your project doesn't require any plugins. Normally, it is much better to 
- * use TweenLite because of the additional flexibility it provides via plugins and its compatibility with 
- * TimelineLite and TimelineMax. 
- * 
+ * TweenNano is a super-lightweight (2k in AS3 and 2.4k in AS2) version of <a href="http://www.greensock.com/tweenlite/">TweenLite</a>
+ * and is only recommended for situations where you absolutely cannot afford the extra 4.7k that the normal
+ * TweenLite engine would cost and your project doesn't require any plugins. Normally, it is much better to
+ * use TweenLite because of the additional flexibility it provides via plugins and its compatibility with
+ * TimelineLite and TimelineMax.
+ *
  * <p><strong>See AS3 files for full ASDocs</strong></p>
- * 
+ *
  * <p><strong>Copyright 2008-2014, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
- * 
+ *
  * @author Jack Doyle, jack@greensock.com
- */	 
+ */
 class com.greensock.TweenNano {
 		public static var version:String = "12.0.0";
 		private static var _time:Number;
@@ -29,9 +29,9 @@ class com.greensock.TweenNano {
 		public static var ticker:MovieClip = _jumpStart(_root);
 		public static var defaultEase:Object =  function(t:Number, b:Number, c:Number, d:Number):Number { return -1 * (t /= d) * (t - 2); };
 		public var target:Object;
-		public var vars:Object; 
+		public var vars:Object;
 		public var ratio:Number = 0;
-		public var _duration:Number; 
+		public var _duration:Number;
 		public var _startTime:Number;
 		public var _gc:Boolean;
 		public var _useFrames:Boolean;
@@ -42,7 +42,7 @@ class com.greensock.TweenNano {
 		private var _rawEase:Object;
 		private var _initted:Boolean;
 		private var _firstPT:Object;
-		
+
 		public function TweenNano(target:Object, duration:Number, vars:Object) {
 			if (!_reservedProps) {
 				_reservedProps = {ease:1, delay:1, useFrames:1, overwrite:1, onComplete:1, onCompleteParams:1, onCompleteScope:1, runBackwards:1, immediateRender:1, onUpdate:1, onUpdateParams:1, onUpdateScope:1, startAt:1};
@@ -53,7 +53,7 @@ class com.greensock.TweenNano {
 			if (ticker.onEnterFrame !== _tick) { //subloaded swfs in Flash Lite restrict access to _root.createEmptyMovieClip(), so we find the subloaded swf MovieClip to createEmptyMovieClip(), but if it gets unloaded, the onEnterFrame will stop running so we need to check each time a tween is created.
 				_jumpStart(_root);
 			}
-			
+
 			this.vars = vars;
 			_duration = duration;
 			this.target = target;
@@ -64,11 +64,11 @@ class com.greensock.TweenNano {
 			_ease = (typeof(_rawEase) == "function") ? Function(_rawEase) : _rawEase.getRatio;
 			_useFrames = (vars.useFrames == true);
 			_startTime = (_useFrames ? _frame : _time) + (this.vars.delay || 0);
-			
-			if (this.vars.overwrite == "all" || int(this.vars.overwrite) == 1) { 
+
+			if (this.vars.overwrite == "all" || int(this.vars.overwrite) == 1) {
 				killTweensOf(this.target);
 			}
-			
+
 			_prev = _last;
 			if (_last) {
 				_last._next = this;
@@ -76,7 +76,7 @@ class com.greensock.TweenNano {
 				_first = this;
 			}
 			_last = this;
-			
+
 			if (this.vars.immediateRender == true || (duration == 0 && this.vars.delay == 0 && this.vars.immediateRender != false)) {
 				_render(0);
 			}
@@ -96,7 +96,7 @@ class com.greensock.TweenNano {
 				_onTick.splice(index, 0, {c:callback, s:scope, up:useParam, p:priority});
 			}
 		}
-		
+
 		private static function _removeTickListener(type:String, callback:Function):Void {
 			var i:Number = _onTick.length;
 			while (--i > -1) {
@@ -106,7 +106,7 @@ class com.greensock.TweenNano {
 				}
 			}
 		}
-		
+
 		private static function _tick():Void {
 			var i:Number = _onTick.length, l:Object;
 			while (--i > -1) {
@@ -117,7 +117,7 @@ class com.greensock.TweenNano {
 				}
 			}
 		}
-		
+
 		private static function _findSubloadedSWF(mc:MovieClip):MovieClip {
 			for (var p:String in mc) {
 				if (typeof(mc[p]) == "movieclip") {
@@ -130,7 +130,7 @@ class com.greensock.TweenNano {
 			}
 			return undefined;
 		}
-		
+
 		public static function _jumpStart(root:MovieClip):MovieClip {
 			if (ticker != undefined) {
 				ticker.removeMovieClip();
@@ -146,7 +146,7 @@ class com.greensock.TweenNano {
 			ticker.removeEventListener = _removeTickListener;
 			return ticker;
 		}
-		
+
 		public function _init():Void {
 			if (vars.startAt) {
 				vars.startAt.immediateRender = true;
@@ -171,7 +171,7 @@ class com.greensock.TweenNano {
 			}
 			_initted = true;
 		}
-		
+
 		private function _initProps(target):Void {
 			if (target != null) {
 				for (var p:String in vars) {
@@ -186,7 +186,7 @@ class com.greensock.TweenNano {
 				}
 			}
 		}
-		
+
 		public function _render(time:Number):Void {
 			if (!_initted) {
 				_init();
@@ -218,7 +218,7 @@ class com.greensock.TweenNano {
 				}
 			}
 		}
-		
+
 		public function kill(target):Void {
 			var i:Number, pt:Object = _firstPT;
 			target = target || _targets || this.target;
@@ -229,7 +229,7 @@ class com.greensock.TweenNano {
 				}
 				return;
 			} else if (_targets != null) {
-				i = _targets.length; 
+				i = _targets.length;
 				while (--i > -1) {
 					if (target == _targets[i]) {
 						_targets.splice(i, 1);
@@ -264,14 +264,14 @@ class com.greensock.TweenNano {
 				_next = _prev = null;
 			}
 		}
-		
-		
+
+
 //---- STATIC FUNCTIONS -------------------------------------------------------------------------
-		
+
 		public static function to(target:Object, duration:Number, vars:Object):TweenNano {
 			return new TweenNano(target, duration, vars);
 		}
-		
+
 		public static function from(target:Object, duration:Number, vars:Object):TweenNano {
 			vars.runBackwards = true;
 			if (vars.immediateRender != false) {
@@ -279,7 +279,7 @@ class com.greensock.TweenNano {
 			}
 			return new TweenNano(target, duration, vars);
 		}
-		
+
 		public static function delayedCall(delay:Number, callback:Function, params:Array, scope:Object, useFrames:Boolean):TweenNano {
 			return new TweenNano(callback, 0, {delay:delay, onComplete:callback, onCompleteParams:params, onCompleteScope:scope, useFrames:useFrames});
 		}
@@ -299,7 +299,7 @@ class com.greensock.TweenNano {
 				tween = next;
 			}
 		}
-		
+
 		public static function killTweensOf(target:Object):Void {
 			var t:TweenNano = _first,
 				next:TweenNano;
@@ -313,5 +313,4 @@ class com.greensock.TweenNano {
 				t = next;
 			}
 		}
-	
 }
